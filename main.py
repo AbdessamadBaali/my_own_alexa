@@ -18,16 +18,19 @@ import os
 def cmd():
     # create speech_recognition
     r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print('Listening')
-        r.adjust_for_ambient_noise(source, duration=0.1)
-        audio = r.listen(source)
+    m = sr.Microphone()
+    sr.Microphone.list_microphone_names()
+
+    with m as source:
+        print("listing")
+        r.adjust_for_ambient_noise(source, duration=.8)
+        audio = r.listen(source,  phrase_time_limit=3)
+    
         try:
             print("Recognizing")
             command = r.recognize_google(audio)
         except Exception as e:
             print(e)
-            return "None"
 
         return command
 
@@ -50,133 +53,186 @@ def take_cmd():
     welcome()
     while (True):
         engine. setProperty("rate", 120)
-        command = cmd().lower()
+        global cmd_To_Do
+        cmd_To_Do = cmd().lower()
 
-        if "open youtube" in command:
+        if "open youtube" in cmd_To_Do:
             speak("Opening youtube ")
             webbrowser.open("www.youtube.com")
             continue
 
-        elif "open browser" in command:
+        elif "open browser" in cmd_To_Do:
             speak("Opening Google Chrome ")
             webbrowser.open("www.google.com")
             continue
 
-        elif "open instagram" in command:
+        elif "open instagram" in cmd_To_Do:
             speak("your instagram is Opening")
             webbrowser.open("https://www.instagram.com")
             continue
 
-        elif "open email" in command:
+        elif "open email" in cmd_To_Do:
             speak("your email is Opening")
             webbrowser.open("https://mail.google.com/mail/u/0/#inbox")
             continue
 
-        elif "open whatsapp" in command:
+        elif "open whatsapp" in cmd_To_Do:
             speak("your whatsapp is Opening ")
             webbrowser.open("https://web.whatsapp.com")
             continue
 
-        elif "open translate" in command:
+        elif "open translate" in cmd_To_Do:
             speak("Opening translate")
             webbrowser.open("https://translate.google.co.ma/?hl=fr")
             continue
 
-        elif "open github" in command:
-            speak("your github is Opening")
+        elif "open github" in cmd_To_Do:
+            speak("your github is Opening!")
             webbrowser.open("https://github.com/AbdessamadBaali")
             continue
 
-        elif "what day is it" in command:
+        elif "what day is it" in cmd_To_Do:
             dayCurrnt = datetime.datetime.now().strftime('%A')
             speak(f"to day is  {dayCurrnt}" )
             continue
 
-        elif "what year are we" in command:
+        elif "what year are we" in cmd_To_Do:
             dayCurrnt = datetime.datetime.now().strftime('%Y')
             speak(f"we are in {dayCurrnt}" )
             continue
 
-        elif "what month are we" in command:
+        elif "what month are we" in cmd_To_Do:
             dayCurrnt = datetime.datetime.now().strftime('%B')
             speak(f"we are in {dayCurrnt}" )
             continue
 
-        elif "tell me the time" in command:
+        elif "tell me the time" in cmd_To_Do:
             time = datetime.datetime.now().strftime('%I:%M %p')
             speak(f"the current time is {time}" )
             continue
 
-        elif "tell me the full date" in command:
+        elif "tell me the full date" in cmd_To_Do:
             time = datetime.datetime.now().strftime('%Y %B %A %I:%M %p')
             speak(f"the full date is {time}" )
             continue
 
-        elif 'play' in command:      
-            print(command)
-            song = command.replace('alexa','')
+        elif 'play' in cmd_To_Do:      
+            print(cmd_To_Do)
+            song = cmd_To_Do.replace('alexa','')
             speak("ok the vedio will play please wait a second")
             pywhatkit.playonyt(song)
             continue
 
-        elif "from wikipedia" in command:
-            print(command)
+        elif "from wikipedia" in cmd_To_Do:
+            print(cmd_To_Do)
             speak("Checking the wikipedia please wait a second ")
-            command = command.replace("wikipedia", "")
-            result = wikipedia.summary(command, sentences=3)
+            cmd_To_Do = cmd_To_Do.replace("wikipedia", "")
+            result = wikipedia.summary(cmd_To_Do, sentences=3)
             speak("According to wikipedia")
             speak(result)
 
-        elif "who  is" in command:
-            print(command)
+        elif "who is" in cmd_To_Do:
             speak("please wait a second ")
-            command = command.replace("how is", "")
-            result = wikipedia.summary(command, sentences=3)
+            cmd_To_Do = cmd_To_Do.replace("how", "")
+            cmd_To_Do = cmd_To_Do.replace("is", "")
+            result = wikipedia.summary(cmd_To_Do, sentences=3)
             speak(result)
 
-        elif 'search' in command:
-            command = command.replace('search', '')
-            command = command.replace('alexa', '')
-            pywhatkit.search(command)
+        elif 'search' in cmd_To_Do:
+            cmd_To_Do = cmd_To_Do.replace('search', '')
+            cmd_To_Do = cmd_To_Do.replace('alexa', '')
+            pywhatkit.search(cmd_To_Do)
             speak("Searching Result in Google!")
             continue
 
-        elif "your name" in command:
+        # tell alexa to say something
+        elif 'alexa say' in cmd_To_Do:
+            cmd_To_Do = cmd_To_Do.replace("say", '')
+            cmd_To_Do = cmd_To_Do.replace("alexa", '')
+            speak(cmd_To_Do)
+
+        elif "your name" in cmd_To_Do:
             speak("I am alexa. Your Virtual Assistant!")
             continue
 
-        elif "how are you doing" in command:
+        elif "how are you doing" in cmd_To_Do:
             speak("i am doing great! thank for asking")
 
 
-        elif 'what are you doing' == command:
+        elif 'what are you doing' == cmd_To_Do:
             speak("nothing")
 
-        elif 'thank you alexa' == command:
+        elif 'thank you' in cmd_To_Do:
             speak("no need to think me- i'm Your Virtual Assistant!")
 
-        elif 'alexa' == command:
+        elif 'alexa' == cmd_To_Do:
             speak("yes sir, what can i do for you")
 
-        elif 'say' in command:
-            command = command.replace("say", '')
-            command = command.replace("alexa", '')
-            speak(command)
-
-        elif 'joke' in command:
+        # tell alexa to say a joke
+        elif 'joke' in cmd_To_Do:
             speak(pyjokes.get_joke())
             continue
-
-        elif 'close' in command:
-            command = command.replace('close', '')
-            command = command.replace('alexa', '')
-            print(command)
-            os.system(f"taskkill/im {command}.exe")
+        
+        # tell alexa to colse  a  programme 
+        elif 'close' in cmd_To_Do:
+            cmd_To_Do = cmd_To_Do.replace('close', '')
+            cmd_To_Do = cmd_To_Do.replace('alexa', '')
+            print(cmd_To_Do)
+            os.system(f"taskkill/im {cmd_To_Do}.exe")
             speak('the programme is closed!')
+            continue 
+
+        # close the browser
+        elif 'close browser' in cmd_To_Do:           
+            os.system(f"chrome.exe")
+            speak('the programme is closed!')
+            continue 
+
+        # open a programme
+        elif 'open' in cmd_To_Do:
+            cmd_To_Do = cmd_To_Do.replace('open', '')
+            pyttsx3.speak(f"{cmd_To_Do} is Opening")
+            os.system(cmd_To_Do)
             continue
 
-        elif "goodbye" in command:
-            speak("Good Bye !")
-            exit()
-            
+        # open microsoft edge
+        elif ("id" in cmd_To_Do) or ("msedge" in cmd_To_Do) or ("edge" in cmd_To_Do):
+            pyttsx3.speak("MICROSOFT EDGE is Opening")
+            os.system("msedge")
+            continue
+    
+        # open microsoft edge
+        elif ("not" in cmd_To_Do) or ("notepad" in cmd_To_Do) or ("editor" in cmd_To_Do):
+            pyttsx3.speak("NOTEPAD is Opening")
+            pyttsx3.speak("NOTEPAD")
+            os.system("Notepad")
+            continue
+
+        # open microsoft excel
+        elif ("excel" in cmd_To_Do) or ("msexcel" in cmd_To_Do) or ("winexcel" in cmd_To_Do):
+            pyttsx3.speak("Opening")
+            pyttsx3.speak("MICROSOFT EXCEL")
+            os.system("excel")
+            continue
+    
+        # open powerpoint
+        elif ("powerpoint" in cmd_To_Do) :
+            pyttsx3.speak("Opening")
+            pyttsx3.speak("MICROSOFT POWERPOINT")
+            os.system("powerpnt")
+            continue
+        
+        # open microsoft word
+        elif "microsoft word" in cmd_To_Do:
+            pyttsx3.speak("Opening")
+            pyttsx3.speak("MICROSOFT WORD")
+            os.system("winword")
+            continue
+    
+        # close the program
+        elif ("goodbye" in cmd_To_Do):
+            pyttsx3.speak("Good Bye !")
+            break
+        print(cmd_To_Do)
+
 take_cmd()
