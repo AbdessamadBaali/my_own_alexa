@@ -29,10 +29,8 @@ def cmd():
         try:
             print("Recognizing")
             command = r.recognize_google(audio)
-        except Exception as e:
-            print(e)
-
-        return command
+        finally:
+            return command
 
 # speatk method 
 def speak(audio):
@@ -159,7 +157,7 @@ def take_cmd():
             speak("i am doing great! thank for asking")
 
 
-        elif 'what are you doing' == cmd_To_Do:
+        elif 'what are you doing' in cmd_To_Do:
             speak("nothing")
 
         elif 'thank you' in cmd_To_Do:
@@ -204,28 +202,24 @@ def take_cmd():
         # open microsoft edge
         elif ("not" in cmd_To_Do) or ("notepad" in cmd_To_Do) or ("editor" in cmd_To_Do):
             pyttsx3.speak("NOTEPAD is Opening")
-            pyttsx3.speak("NOTEPAD")
             os.system("Notepad")
             continue
 
         # open microsoft excel
         elif ("excel" in cmd_To_Do) or ("msexcel" in cmd_To_Do) or ("winexcel" in cmd_To_Do):
-            pyttsx3.speak("Opening")
-            pyttsx3.speak("MICROSOFT EXCEL")
+            pyttsx3.speak("Opening MICROSOFT EXCEL")
             os.system("excel")
             continue
     
         # open powerpoint
         elif ("powerpoint" in cmd_To_Do) :
-            pyttsx3.speak("Opening")
-            pyttsx3.speak("MICROSOFT POWERPOINT")
+            pyttsx3.speak("Opening MICROSOFT POWERPOINT")
             os.system("powerpnt")
             continue
         
         # open microsoft word
         elif "microsoft word" in cmd_To_Do:
-            pyttsx3.speak("Opening")
-            pyttsx3.speak("MICROSOFT WORD")
+            pyttsx3.speak("Opening MICROSOFT WORD")
             os.system("winword")
             continue
     
